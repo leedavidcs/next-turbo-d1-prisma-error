@@ -1,0 +1,11 @@
+name = "next-turbo-d1-prisma-error"
+compatibility_date = "2024-04-19"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = "./apps/www/.vercel/output/static"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "example"
+preview_database_id = "DB"
+migrations_dir = "./packages/prisma/migrations"
+database_id = "PASTE YOUR DATABASE_ID HERE"

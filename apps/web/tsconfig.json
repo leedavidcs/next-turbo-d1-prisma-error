@@ -1,15 +1,28 @@
 {
-  "extends": "@repo/typescript-config/nextjs.json",
+  "extends": "@project/tsconfig/nextjs.json",
   "compilerOptions": {
     "plugins": [
       {
         "name": "next"
       }
-    ]
+    ],
+    "types": [
+      "@cloudflare/workers-types"
+    ],
+    "declaration": false,
+    "declarationMap": false,
+    "moduleResolution": "bundler",
+    "paths": {
+      "@project/prisma": [
+        "../../packages/prisma/src"
+      ],
+    },
+    "strictNullChecks": true,
+    "strict": true,
   },
   "include": [
     "next-env.d.ts",
-    "next.config.js",
+    "next.config.mjs",
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"

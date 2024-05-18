@@ -1,0 +1,74 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+model Account {
+  access_token      String?  @map("access_token")
+  createdAt         DateTime @default(now()) @map("created_at")
+  expiresAt         Int?     @map("expires_at")
+  id                String   @id @default(cuid())
+  id_token          String?  @map("id_token")
+  provider          String
+  providerAccountId String   @map("provider_account_id")
+  refresh_token     String?  @map("refresh_token")
+  scope             String?
+  session_state     String?  @map("session_state")
+  token_type        String?  @map("token_type")
+  type              String
+  updatedAt         DateTime @default(now()) @updatedAt @map("updated_at")
+  userId            String   @map("user_id")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+  @@map("account")
+}
+
+model Session {
+  expires      DateTime
+  id           String   @id @default(cuid())
+  sessionToken String   @unique @map("session_token")
+  userId       String   @map("user_id")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("session")
+}
+
+model User {
+  createdAt     DateTime  @default(now()) @map("created_at")
+  email         String    @unique
+  emailVerified DateTime? @map("email_verified")
+  id            String    @id @default(cuid())
+  image         String?
+  name          String    @unique
+  updatedAt     DateTime  @default(now()) @updatedAt @map("updated_at")
+
+  accounts Account[]
+  sessions Session[]
+
+  @@map("user")
+}
+
+model VerificationToken {
+  expires    DateTime
+  identifier String
+  token      String   @unique
+
+  @@unique([identifier, token])
+  @@map("verification_token")
+}
